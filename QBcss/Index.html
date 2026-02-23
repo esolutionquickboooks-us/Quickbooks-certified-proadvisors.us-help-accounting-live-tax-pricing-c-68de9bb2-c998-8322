@@ -1,0 +1,2985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QB Data Shield – QuickBooks Data Protection & Recovery</title>
+    <link rel="icon" type="image/svg+xml" href="https://downloadauthenticator.com/wp-content/uploads/2024/06/intuit_com.svg">
+    <!-- Bootstrap 5, Font Awesome, Inter font, Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Mada font (primary) -->
+    <link href="https://fonts.googleapis.com/css2?family=Mada:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React, ReactDOM, Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --primary: #2CA01C;
+            --primary-dark: #008600;
+            --primary-light: #4CC73C;
+            --secondary: #4361ee;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Mada', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+            padding-top: 90px;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark) !important;
+            margin-right: 2rem;
+        }
+        
+        .navbar-brand img {
+            height: 55px;
+            transition: transform 0.2s;
+        }
+        
+        .navbar-brand img:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Always visible navigation - no collapse toggler */
+        .navbar .navbar-nav {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            gap: 0.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin: 0 8px;
+            color: var(--dark) !important;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 6px;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary) !important;
+            background-color: rgba(44, 160, 28, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0.75rem;
+            right: 0.75rem;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+            width: calc(100% - 1.5rem);
+            transform: scaleX(0);
+            transform-origin: center;
+        }
+        
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .navbar .btn {
+            margin-left: 8px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 991px) {
+            .navbar .container {
+                flex-wrap: wrap;
+            }
+            .navbar .navbar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+                width: 100%;
+            }
+            body {
+                padding-top: 120px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar .navbar-nav {
+                gap: 0.2rem;
+            }
+            .nav-link {
+                margin: 0 4px;
+                padding: 0.4rem 0.5rem !important;
+                font-size: 0.9rem;
+            }
+            .navbar .btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(44, 160, 28, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .hero-section {
+            background: linear-gradient(to bottom, #050F22, #2684BF);
+            padding: 80px 0 100px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .hero-content h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            color: white;
+        }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-preview {
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .dashboard-preview:hover {
+            transform: perspective(1000px) rotateY(0) rotateX(0);
+        }
+        
+        .feature-card {
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-light);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(44, 160, 28, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            background: rgba(44, 160, 28, 0.2);
+        }
+        
+        .feature-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-card p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .demo-section {
+            background: #000000;
+            color: white;
+            padding: 100px 0;
+        }
+        
+        .demo-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            height: 100%;
+            transition: all 0.3s ease;
+            width: 300px; /* Fixed width for marquee */
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover .testimonial-avatar {
+            transform: scale(1.1);
+        }
+        
+        .footer {
+            background: #000000;
+            color: white;
+            padding: 80px 0 30px;
+        }
+        
+        .footer h5 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .footer a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+        
+        .card-1 {
+            top: 20%;
+            left: -30px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .card-2 {
+            bottom: 30%;
+            right: -30px;
+            animation: float 3s ease-in-out infinite 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .benefits-container {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .benefits-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .video-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            width: 100%;
+        }
+        
+        .video-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-container:hover .video-overlay {
+            opacity: 1;
+        }
+        
+        .video-play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .video-play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .company-logo {
+            height: 60px;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        
+        .simple-steps {
+            color: white;
+            padding: 2rem;
+        }
+        
+        .simple-steps h2 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+        
+        .simple-step {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .simple-step-number {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .simple-step-content h3 {
+            font-weight: 800;
+            font-size: 1.8rem;
+            line-height: 1.2;
+            margin: 0;
+        }
+        
+        .featured-testimonial {
+            background: #e6f7ff;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-content {
+            padding-right: 2rem;
+        }
+        
+        .testimonial-content p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author h5 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .testimonial-author p {
+            color: var(--gray);
+            margin: 0;
+        }
+        
+        .testimonial-image {
+            text-align: center;
+        }
+        
+        .testimonial-image img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+        
+        .benefit-icon {
+            width: 55px;
+            height: 55px;
+            background: rgba(44, 160, 28, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover .benefit-icon {
+            background: rgba(44, 160, 28, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .benefit-text h5 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .benefit-text p {
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Enhanced File Health Check Styles (unchanged) */
+        .file-health-check {
+            --qb-green: #2ca01c;
+            --qb-dark-green: #248a16;
+            --qb-light-green: #e8f5e6;
+            --qb-green-gradient: linear-gradient(135deg, #2ca01c, #248a16);
+            --qb-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 20px rgba(44, 160, 28, 0.15);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+            font-family: 'Mada', 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text);
+            line-height: 1.7;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .file-health-check .header {
+            background: var(--qb-green-gradient);
+            color: white;
+            padding: 36px 28px;
+            text-align: center;
+            position: relative;
+        }
+
+        .file-health-check .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path fill="%23ffffff" d="M50 15 L61 35 L82 38 L66 54 L70 75 L50 65 L30 75 L34 54 L18 38 L39 35 Z"/></svg>') center/40px;
+            pointer-events: none;
+        }
+
+        .file-health-check .qb-logo {
+            width: 70px;
+            height: auto;
+            margin: 0 auto 16px;
+            display: block;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+            transition: transform 0.3s ease;
+        }
+
+        .file-health-check .qb-logo:hover {
+            transform: scale(1.08);
+        }
+
+        .file-health-check .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .file-health-check .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .file-health-check .question-section {
+            padding: 32px 28px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .file-health-check .progress-container {
+            margin-bottom: 28px;
+        }
+
+        .file-health-check .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .file-health-check .progress-fill {
+            height: 100%;
+            background: var(--qb-green-gradient);
+            width: 0%;
+            border-radius: 6px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .file-health-check .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+            transform: skewX(-20deg);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) skewX(-20deg); }
+            100% { transform: translateX(100%) skewX(-20deg); }
+        }
+
+        .file-health-check .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .file-health-check .progress-label strong {
+            color: var(--qb-green);
+        }
+
+        .file-health-check .question-wrapper {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .file-health-check .question-wrapper.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .file-health-check .question {
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 14px;
+            border-left: 5px solid var(--qb-green);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .file-health-check .question:hover {
+            background: #f1f3f5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .file-health-check .question-number {
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            background: var(--qb-green);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .file-health-check .question label {
+            display: block;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 17px;
+            padding-left: 36px;
+        }
+
+        .file-health-check .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+            padding-left: 36px;
+        }
+
+        .file-health-check .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15.5px;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .file-health-check .radio-option:hover {
+            background: rgba(44, 160, 28, 0.1);
+        }
+
+        .file-health-check .radio-option input[type="radio"] {
+            accent-color: var(--qb-green);
+            width: 19px;
+            height: 19px;
+            cursor: pointer;
+        }
+
+        .file-health-check .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            gap: 12px;
+        }
+
+        .file-health-check .btn {
+            background: var(--qb-green);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(44, 160, 28, 0.3);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .file-health-check .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .file-health-check .btn:hover::before {
+            left: 100%;
+        }
+
+        .file-health-check .btn:hover {
+            background: var(--qb-dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(44, 160, 28, 0.4);
+        }
+
+        .file-health-check .btn:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .file-health-check .btn-back {
+            background: transparent;
+            color: var(--qb-green);
+            border: 2px solid var(--qb-green);
+            box-shadow: none;
+        }
+
+        .file-health-check .btn-back:hover {
+            background: var(--qb-light-green);
+            border-color: var(--qb-dark-green);
+            color: var(--qb-dark-green);
+        }
+
+        .file-health-check #drop-zone {
+            border: 3px dashed var(--qb-green);
+            border-radius: 18px;
+            padding: 48px;
+            background: var(--qb-light-green);
+            text-align: center;
+            transition: var(--transition);
+            cursor: not-allowed;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .file-health-check #drop-zone.enabled {
+            cursor: pointer;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .file-health-check #drop-zone.dragover {
+            background: #d0f0cc;
+            border-color: var(--qb-dark-green);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(44, 160, 28, 0.2);
+        }
+
+        .file-health-check .upload-icon {
+            font-size: 56px;
+            color: var(--qb-green);
+            margin-bottom: 16px;
+        }
+
+        .file-health-check #drop-zone p {
+            margin: 10px 0;
+            font-size: 17px;
+            color: var(--text);
+        }
+
+        .file-health-check #drop-zone p strong {
+            color: var(--qb-green);
+            font-weight: 600;
+        }
+
+        .file-health-check #file-input {
+            display: none;
+        }
+
+        .file-health-check .upload-area {
+            padding: 40px 28px;
+            text-align: center;
+            display: none;
+        }
+
+        .file-health-check .result-area {
+            padding: 28px;
+            display: none;
+        }
+
+        .file-health-check .scanning {
+            text-align: center;
+            padding: 48px 20px;
+        }
+
+        .file-health-check .scanner-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 28px;
+            position: relative;
+        }
+
+        .file-health-check .scanner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90px;
+            height: 90px;
+            border: 6px solid #e9ecef;
+            border-top: 6px solid var(--qb-green);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(44, 160, 28, 0.3);
+        }
+
+        .file-health-check .scanner::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 2px solid rgba(44, 160, 28, 0.2);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .file-health-check .scanning h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--qb-green);
+            font-weight: 600;
+        }
+
+        .file-health-check .scanning p {
+            color: var(--text-light);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .file-health-check .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 8px;
+            margin: 28px 0;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .file-health-check .progress-fill-scan {
+            height: 100%;
+            background: var(--qb-green-gradient);
+            width: 0%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .file-health-check .progress-fill-scan::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+            transform: skewX(-20deg);
+        }
+
+        .file-health-check .result {
+            text-align: center;
+            padding: 32px 20px;
+        }
+
+        .file-health-check .result h2 {
+            font-size: 26px;
+            margin-bottom: 16px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .file-health-check .file-info {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #495057;
+            text-align: left;
+            border-left: 4px solid var(--qb-green);
+        }
+
+        .file-health-check .error-code {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #b71c1c;
+            padding: 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 19px;
+            border-left: 6px solid #d9534f;
+            margin: 24px 0;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(217, 83, 79, 0.15);
+            position: relative;
+        }
+
+        .file-health-check .error-code::before {
+            content: 'Error';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #d9534f;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-health-check .error-code strong {
+            color: #900;
+            font-size: 21px;
+        }
+
+        .file-health-check .result p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .file-health-check .tip-box {
+            background: var(--qb-light-green);
+            border-left: 6px solid var(--qb-green);
+            padding: 24px;
+            border-radius: 16px;
+            margin: 24px 0;
+            font-size: 15.5px;
+            color: #1e7e34;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(44, 160, 28, 0.1);
+            position: relative;
+        }
+
+        .file-health-check .tip-box::before {
+            content: 'Recommendation';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--qb-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-health-check .tip-box strong {
+            color: #155724;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .file-health-check .action-btn {
+            background: var(--qb-green);
+            margin: 12px 8px;
+            box-shadow: 0 4px 12px rgba(44, 160, 28, 0.3);
+        }
+
+        .file-health-check .action-btn:hover {
+            background: var(--qb-dark-green);
+            box-shadow: 0 8px 20px rgba(44, 160, 28, 0.4);
+        }
+
+        .file-health-check .reset-btn {
+            background: transparent;
+            color: var(--qb-green);
+            border: 2px solid var(--qb-green);
+            box-shadow: none;
+        }
+
+        .file-health-check .reset-btn:hover {
+            background: var(--qb-light-green);
+            border-color: var(--qb-dark-green);
+            color: var(--qb-dark-green);
+        }
+
+        .file-health-check .qb-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f1f3f5;
+            font-size: 13px;
+            color: #6c757d;
+            border-top: 1px solid var(--border);
+        }
+
+        .file-health-check .qb-footer a {
+            color: var(--qb-green);
+            text-decoration: none;
+        }
+
+        .file-health-check .qb-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Expert Cleanup Card (adjusted for GIF and logo) ===== */
+        .expert-card {
+            width: 380px;
+            max-width: 100%;
+            background: #000;
+            color: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(2,6,23,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            margin: 0 auto;
+        }
+
+        .expert-card-media {
+            width: 100%;
+            height: 300px; /* increased to show more of GIF */
+            background: url('https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/fusion/images/Susan_DeskBRoll_V1-0050-hero3-vid-QBL-US-EN-desktop.gif') center/cover no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .expert-card-media .media-overlay {
+            width: 100%;
+            height: 40px; /* smaller overlay to reveal more GIF */
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+        }
+
+        .expert-card-content {
+            padding: 24px 24px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: center;
+        }
+
+        /* Logo badge replacing LIVE text */
+        .logo-badge {
+            display: inline-block;
+            background: #0f172a;
+            border: 1px solid rgba(99,102,241,0.12);
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+        .logo-badge img {
+            height: 28px;
+            width: auto;
+            display: block;
+        }
+
+        .expert-card-content h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 4px;
+            color: white;
+        }
+
+        .expert-card-content .description {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 4px;
+        }
+
+        .expert-card-content ul.features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 8px;
+            margin-top: 6px;
+        }
+
+        .expert-card-content ul.features li {
+            font-size: 13px;
+            color: #e6eef8;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .expert-card-content ul.features li .tick {
+            display: inline-flex;
+            width: 20px;
+            height: 20px;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #16a34a;
+            flex-shrink: 0;
+        }
+
+        .price-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 10px 10px 0 10px;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .price small {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .note {
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .cta-expert {
+            margin-top: 14px;
+            width: 100%;
+            display: block;
+            background: #34d399;
+            color: #031018;
+            border: none;
+            padding: 12px 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .cta-expert:hover {
+            background: #2db486;
+        }
+
+        .cta-expert:active {
+            transform: translateY(1px);
+        }
+
+        /* ===== ENLARGED RIGHT COLUMN: cleanup info card ===== */
+        .cleanup-info {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 45px 40px;
+            box-shadow: 0 20px 50px rgba(2,6,23,0.15);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cleanup-info h3 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #111827;
+        }
+
+        .cleanup-info .lead-text {
+            font-size: 17px;
+            color: #4b5563;
+            margin-bottom: 28px;
+            line-height: 1.7;
+        }
+
+        .cleanup-info .subhead {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 28px 0 20px;
+            color: #111827;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            align-items: flex-start;
+        }
+
+        .step-icon {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-icon img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .step-content h4 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .step-content p {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* Consultation form */
+        .consult-form {
+            margin-top: 32px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 32px;
+        }
+
+        .consult-form h4 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Mada', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 160, 28, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            font-weight: 600;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== Marquee styles ===== */
+        .marquee-wrapper {
+            overflow: hidden;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-300px * 3 - 3rem)); } /* 3 cards + gaps */
+        }
+
+        /* Ensure cards don't shrink */
+        .testimonial-card {
+            width: 300px;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cleanup-info {
+                padding: 30px 25px;
+            }
+            .cleanup-info h3 {
+                font-size: 28px;
+            }
+            .cleanup-info .subhead {
+                font-size: 22px;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .card-1, .card-2 {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                margin: 10px 0;
+                animation: none;
+            }
+            .simple-steps h2 {
+                font-size: 2rem;
+            }
+            .simple-step-content h3 {
+                font-size: 1.5rem;
+            }
+            .featured-testimonial {
+                padding: 2rem;
+            }
+            .testimonial-content p {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ===== CONTACT SECTION STYLES (added from contact page) ===== */
+        .contact-section {
+            position: relative;
+            padding: 60px 0;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Background image (base64) – subtle, placed behind content */
+        .contact-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,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');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.035; /* very subtle watermark */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .contact-section > .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(44, 160, 28, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        .contact-icon-lg {
+            width: 60px;
+            height: 60px;
+            background: rgba(44, 160, 28, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contact-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-list li i {
+            color: var(--primary);
+            font-size: 1.3rem;
+            width: 28px;
+            margin-top: 0.2rem;
+        }
+
+        .contact-list li div {
+            line-height: 1.5;
+        }
+
+        .contact-list li strong {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .contact-list li span {
+            color: #4a5568;
+        }
+
+        .why-list-custom {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .why-list-custom li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .why-list-custom li i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            width: 24px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .form-card:hover {
+            box-shadow: 0 20px 40px rgba(44, 160, 28, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        .form-control, .form-select {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 160, 28, 0.15);
+            outline: none;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 40px;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(44, 160, 28, 0.3);
+        }
+
+        .contact-block {
+            background: #000000;
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+        }
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .contact-item .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+            font-size: 1.2rem;
+        }
+        .contact-item p {
+            margin-bottom: 0.2rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .contact-item h5 {
+            margin: 0;
+            color: white;
+            font-weight: 600;
+        }
+        .highlight-green {
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar navbar-light fixed-top">
+        <div class="container d-flex flex-wrap align-items-center justify-content-between">
+            <a class="navbar-brand" href="https://e-solution.us/quickbooks-accounting-services/">
+                <img src="https://i.ibb.co/d4DTVY62/Chat-GPT-Image-Nov-4-2025-04-01-58-AM-removebg-preview.png" alt="QB Data Shield">
+            </a>
+            <div class="navbar-nav flex-row align-items-center">
+                <a class="nav-link" href="#features">Services</a>
+                <a class="nav-link" href="#demos">For Business</a>
+                <a class="nav-link" href="https://e-solution.us/quickbooks-errors/">QuickBooks Errors</a>
+                <!-- New Pricing Calculator link -->
+                <a class="nav-link" href="#" onclick="showPricingCalculator(); return false;">Pricing Calculator</a>
+                <!-- New Contact link added -->
+                <a class="nav-link" href="C:\Users\Admin\Downloads\QBcss\about.html">About</a>
+                <div class="d-flex ms-lg-3">
+                    <a href="https://quickbooks.intuit.com/" class="btn btn-outline-primary me-2">Login</a>
+                    <a href="https://living-harlequin-drapnftat0-pvd1l24f8e.edgeone.app/" class="btn btn-primary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1>QuickBooks Data Corruption? Get Expert Help Now!</h1>
+                        <p class="lead">Experiencing file corruption, data loss, or errors in QuickBooks? Our certified experts provide immediate assistance to recover, repair, and protect your financial data.</p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="#demos" class="btn btn-primary btn-lg">Get Emergency Support</a>
+                            <a href="#demos" class="btn btn-outline-primary btn-lg">How We Fix Issues</a>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-white-50">24/7 Expert Support • 99% Success Rate • Quick Response</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 position-relative">
+                    <div class="dashboard-preview">
+                        <img src="https://quickbooks.intuit.com/oidam/intuit/sbseg/en_us/fusion/images/fleurs-et-sel-brand-feature-transactions-desktop-qbo-us-3.jpg" alt="QB Data Recovery" class="img-fluid rounded">
+                    </div>
+                    <div class="floating-card card-1">
+                        <i class="fas fa-file-invoice-dollar text-success"></i>
+                        <span>Invoice Paid: $1,250</span>
+                    </div>
+                    <div class="floating-card card-2">
+                        <i class="fas fa-chart-line text-info"></i>
+                        <span>Revenue Up 24%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TRUST BAR ========== -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <p class="text-center text-muted mb-3">Trusted by 50,000+ QuickBooks users worldwide</p>
+            <div class="row justify-content-center align-items-center g-4">
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-keeper-2x.png" alt="Keeper" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-square.svg" alt="Square" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-servicetitan.svg" alt="ServiceTitan" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-amazon.svg" alt="Amazon" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-etsy-2x.png" alt="Etsy" class="company-logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURES SECTION ========== -->
+    <section class="py-5" id="features">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">Comprehensive QuickBooks Data Protection</h2>
+                    <p class="lead">Expert solutions for all your QuickBooks data issues and emergencies</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-medical-alt"></i>
+                        </div>
+                        <h4>Data Corruption Recovery</h4>
+                        <p>Expert recovery of corrupted QuickBooks files with 99% success rate. We restore your financial data and ensure business continuity.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/help-article/damaged-data/fix-data-damage-quickbooks-desktop-company-file/L0JwZv4iw_US_en_US" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock-open"></i>
+                        </div>
+                        <h4>File Lock Resolution</h4>
+                        <p>Quickly resolve file access issues and multi-user conflicts. Get your team back to work with minimal disruption.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/help-article/manage-users/fix-locked-file-errors-quickbooks-desktop/L70Sfes2X_US_en_US" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h4>Error Diagnosis & Repair</h4>
+                        <p>Comprehensive diagnosis and repair of all QuickBooks error codes. We identify root causes and implement permanent fixes.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/help-article/login-password/fix-common-problems-errors-quickbooks-desktop-tool/L3Yab5gNN_US_en_US" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>Live Expert Assistance</h4>
+                        <p>24/7 access to certified QuickBooks experts for immediate help with any data issues or technical problems.</p>
+                        <a href="https://quickbooks.intuit.com/oa/live/?cid=ppc_G_p_US_.QBL_US_GGL_Brand_NonTop_Search_Desktop_WP._online%20live%20quickbooks%20bookkeeping_txt&agid=140930769838&infinity=ict2~net~gaw~ar~723171752542~kw~online%20live%20quickbooks%20bookkeeping~mt~p~cmp~QBL_US_GGL_Brand_NonTop_Search_Desktop_WP~ag~Bookkeeper&gclsrc=aw.ds&gad_source=1&gad_campaignid=18016779320&gbraid=0AAAAAD1w8J8TV3IMNBWKmaNzpwJHoX3pF&gclid=CjwKCAiAwqHIBhAEEiwAx9cTeaLKUGC0__JfNWys-Fq1IHrjIgrF5AkQwcnVKtZEhN9ySCht9qshKhoCX6EQAvD_BwE" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h4>Automated Backup Solutions</h4>
+                        <p>Set up automated backups to prevent data loss. Our system ensures your financial data is always protected.</p>
+                        <a href="https://quickbooks.intuit.com/app/apps/appdetails/backup/en-us/" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h4>Proactive Notifications</h4>
+                        <p>Get instant alerts about potential data issues before they become critical problems. Stay ahead of data corruption.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/other-questions/error-code-description-causes-solutions/00/887797" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== DEMO SECTION (with File Health Check) ========== -->
+    <section class="demo-section" id="demos">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title text-white">How We Protect Your QuickBooks Data</h2>
+                    <p class="lead text-white-50">See our proven process for recovering and protecting your financial data</p>
+                </div>
+            </div>
+            
+            <div class="row g-5 mb-5">
+                <div class="col-lg-6">
+                    <div class="video-container">
+                        <video autoplay muted loop>
+                            <source src="https://quickbooks.intuit.com/oidam/intuit/sbseg/en_us/fusion/video/fusion-hero-animation-expert-vp8-transparent-bg.webm" type="video/webm">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-overlay">
+                            <div class="video-play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <h4 class="text-white">How We Recover Your Data</h4>
+                        <p class="text-white-50">Watch our experts in action</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="simple-steps">
+                        <h2>How our E-solution Live Experts Cleanup Works</h2>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">1</div>
+                            <div class="simple-step-content">
+                                <h3>Remote Assessment</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">2</div>
+                            <div class="simple-step-content">
+                                <h3>Data Verification</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">3</div>
+                            <div class="simple-step-content">
+                                <h3>Choose Plan</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">4</div>
+                            <div class="simple-step-content">
+                                <h3>Recovery & Protection</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <div class="benefits-container">
+                        <h4 class="mb-4 text-white">Reasons to Choose <b>E-Solution </b>Low-Cost and Dedicated Services for QuickBooks ProAdvisor</h4>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>99% Success Rate</h5>
+                                <p>Our certified QuickBooks ProAdvisors at E-Solution have successfully restored over 50,000 corrupted files with complete data integrity.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>24/7 Expert Support</h5>
+                                <p>Round-the-clock access to QuickBooks-certified technicians for immediate help with any data emergency.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>Data Security Guaranteed</h5>
+                                <p>Bank-level 256-bit encryption protects your financial data during transfers and storage with secure remote access.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>Quick Response Time</h5>
+                                <p>Initial response within 15 minutes for emergencies, with most data recovery completed in just 2-4 hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <!-- Enhanced File Health Check Component (unchanged) -->
+                    <div class="file-health-check">
+                        <div class="header">
+                            <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/accounting/logo-qbm-app-desktop-2x.png" alt="QuickBooks Logo" class="qb-logo">
+                            <h1>QuickBooks File Health Check</h1>
+                            <p>Professional diagnostic tool for QuickBooks company files. Answer a few questions to begin.</p>
+                        </div>
+
+                        <div class="question-section" id="question-section">
+                            <div class="progress-container">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-fill" id="question-progress"></div>
+                                </div>
+                                <div class="progress-label">
+                                    <span>Question <strong id="current-step">1</strong> of 3</span>
+                                    <span><strong id="percent-text">0%</strong> Complete</span>
+                                </div>
+                            </div>
+
+                            <div class="question-wrapper active" id="q1-wrapper">
+                                <div class="question">
+                                    <div class="question-number">1</div>
+                                    <label>Is this your most recent company file backup?</label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" name="q1" value="yes" id="q1-yes">
+                                            <label for="q1-yes">Yes, this is my latest backup</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" name="q1" value="no" id="q1-no">
+                                            <label for="q1-no">No, I have a newer version</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <div></div>
+                                    <button class="btn" id="next1-btn" disabled>Next</button>
+                                </div>
+                            </div>
+
+                            <div class="question-wrapper" id="q2-wrapper">
+                                <div class="question">
+                                    <div class="question-number">2</div>
+                                    <label>Have you recently copied or moved this file across drives or networks?</label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" name="q2" value="yes" id="q2-yes">
+                                            <label for="q2-yes">Yes, within the last 24 hours</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" name="q2" value="no" id="q2-no">
+                                            <label for="q2-no">No, it's been in the same location</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-back" id="back1-btn">Back</button>
+                                    <button class="btn" id="next2-btn" disabled>Next</button>
+                                </div>
+                            </div>
+
+                            <div class="question-wrapper" id="q3-wrapper">
+                                <div class="question">
+                                    <div class="question-number">3</div>
+                                    <label>Are you seeing any specific error messages when opening QuickBooks?</label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" name="q3" value="yes" id="q3-yes">
+                                            <label for="q3-yes">Yes (e.g., -6000, -83, connection lost)</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" name="q3" value="no" id="q3-no">
+                                            <label for="q3-no">No, just can't open the file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-back" id="back2-btn">Back</button>
+                                    <button class="btn" id="continue-btn">Continue to File Upload</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="upload-area" id="upload-section">
+                            <div id="drop-zone">
+                                <div class="upload-icon">📁</div>
+                                <p><strong>Drop your QuickBooks file here</strong></p>
+                                <p>or click to browse from your computer</p>
+                                <button class="btn" onclick="document.getElementById('file-input').click()">
+                                    Select Company File
+                                </button>
+                                <input type="file" id="file-input">
+                            </div>
+                        </div>
+
+                        <div class="result-area" id="result-section">
+                            <div class="scanning" id="scanning-state">
+                                <div class="scanner-container">
+                                    <div class="scanner"></div>
+                                </div>
+                                <h3>Analyzing Your QuickBooks Company File...</h3>
+                                <p>We're performing a comprehensive integrity check including license data, company ID, and database structure.</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill-scan" id="progress-fill"></div>
+                                </div>
+                                <p><strong id="progress-text">0%</strong> complete</p>
+                            </div>
+
+                            <div class="result" id="result-state" style="display: none;">
+                                <h2>Diagnostic Complete</h2>
+                                <div class="file-info" id="file-name-display"></div>
+                                <div class="error-code">
+                                    <strong>Status Code: 11118</strong><br>
+                                    QuickBooks could not load the license/company ID data. This may be caused by missing or damaged registration files.
+                                </div>
+                                <p>Your company file contains corrupted license metadata that prevents QuickBooks from validating ownership and registration.</p>
+                                <div class="tip-box">
+                                    <strong>Recommended Action Plan:</strong>
+                                    1. Restore from a verified backup created before the issue occurred<br>
+                                    2. Activate Data Protection Support if the file contains critical data
+                                </div>
+                                <button class="btn action-btn" id="activate-idp-btn">
+                                    Activate the IDP
+                                </button>
+                                <button class="btn reset-btn" onclick="resetUpload()">
+                                    Check Another File
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qb-footer">
+                            QuickBooks File Health Check • Powered by Intuit Diagnostic Technology • 
+                            <a href="https://quickbooks.intuit.com" target="_blank">quickbooks.intuit.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TWO-COLUMN SECTION: Expert Cleanup Card (left) + How It Works + Form (right) ========== -->
+    <section class="py-5 bg-light" id="expert-cleanup">
+        <div class="container">
+            <div class="row g-5 align-items-stretch">
+                <!-- Left column: Expert Cleanup Card (adjusted) -->
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div class="expert-card" role="article" aria-label="Expert Cleanup Card">
+                        <div class="expert-card-media">
+                            <div class="media-overlay" aria-hidden="true"></div>
+                        </div>
+                        <div class="expert-card-content">
+                            <!-- Logo badge replaces LIVE text -->
+                            <div class="logo-badge">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/gbsg-logo-horz-web-QBL-Expert-cleanup-white.svg" alt="Expert Cleanup">
+                            </div>
+                            <h2>Expert Cleanup</h2>
+                            <p class="description">Certified bookkeepers will clean up your books with <strong>guaranteed accuracy</strong>.</p>
+                            <ul class="features">
+                                <li><span class="tick">✔</span><span>Profit &amp; loss, balance sheet, trial balance and general ledger included.</span></li>
+                                <li><span class="tick">✔</span><span>We evaluate work to ensure it meets our standards.</span></li>
+                                <li><span class="tick">✔</span><span>Full reports package with expert review.</span></li>
+                            </ul>
+                            <div class="price-wrap">
+                                <div class="price">$150 <small>/mo</small></div>
+                                <div class="note">One-time fee. Prices may vary depending on number of months needed.</div>
+                                <button class="cta-expert" onclick="consult()">Get a free consultation</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: ENLARGED cleanup info card -->
+                <div class="col-lg-6 d-flex">
+                    <div class="cleanup-info">
+                        <h3>One time cleanup of your books</h3>
+                        <p class="lead-text">Let our team of bookkeeping experts ensure your books are accurate for peace of mind filing taxes, managing your books, or applying for loans.</p>
+
+                        <div class="subhead">How Live Expert Cleanup works</div>
+
+                        <!-- Step 1: Schedule a call -->
+                        <div class="step-item">
+                            <div class="step-icon">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/icons/icon-call-black.svg" alt="Call icon">
+                            </div>
+                            <div class="step-content">
+                                <h4>Schedule a call</h4>
+                                <p>Set up an appointment with a Live bookkeeper and be ready to sign in to QuickBooks before you call. Your first session will take about 90 minutes.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Upload your docs -->
+                        <div class="step-item">
+                            <div class="step-icon">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/icons/icon-upload-black.svg" alt="Upload icon">
+                            </div>
+                            <div class="step-content">
+                                <h4>Upload your docs</h4>
+                                <p>Your bookkeeper will ask you to upload the right business and financial documents to get started with your cleanup.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Finishing your cleanup -->
+                        <div class="step-item">
+                            <div class="step-icon">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/icons/icon-file-search-black.svg" alt="File search icon">
+                            </div>
+                            <div class="step-content">
+                                <h4>Finishing your cleanup</h4>
+                                <p>A bookkeeping team will organize your accounts, review and categorize transactions, and prepare your reports for review.</p>
+                            </div>
+                        </div>
+
+                        <!-- Consultation Form -->
+                        <div class="consult-form">
+                            <h4>Schedule a free consultation</h4>
+                            <form id="consultForm" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Full Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Email Address" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" class="form-control" placeholder="Phone Number" required>
+                                </div>
+                                <button type="submit" class="btn-submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS SECTION ========== -->
+    <section class="py-5" id="testimonials">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">What Our Customers Say</h2>
+                    <p class="lead">Thousands of businesses trust us with their QuickBooks data support</p>
+                </div>
+            </div>
+            
+            <!-- Featured testimonial (unchanged) -->
+            <div class="featured-testimonial">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="testimonial-content">
+                            <p>Forecasting has been really helpful. It'll show me trends last quarter's or last year's sales. Just being able to see the graphs and the charts has been really helpful. The insights we've gained from the data recovery tools have transformed how we approach our financial planning and budgeting processes.</p>
+                            <div class="testimonial-author">
+                                <div>
+                                    <h5>Laura Adekoya</h5>
+                                    <p>Owner of Fleurs et Sel</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="testimonial-image">
+                            <img src="https://i.ibb.co/4nPZc1x2/fleurs-et-sel-ecommerce-2184-brand-photo-25-isolated-4-removebg-preview.png" alt="Laura Adekoya" style="width: 100%; max-width: 350px; border-radius: 20px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Marquee testimonials -->
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    <!-- Original cards (duplicated for seamless loop) -->
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">MS</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Michael Stevens</h5>
+                                <small class="text-muted">CFO, Tech Solutions Inc.</small>
+                            </div>
+                        </div>
+                        <p>The automated backup solution saved us during a server crash. We were back up and running in hours instead of days. Highly recommend their service!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">SJ</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Julie James</h5>
+                                <small class="text-muted">Main Street Iowa, LLC</small>
+                            </div>
+                        </div>
+                        <p>I was panicking when my QuickBooks file wouldn't open. Their emergency support had me back in business the same day. Worth every penny!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">RD</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Robert Davis</h5>
+                                <small class="text-muted">Accounting Manager</small>
+                            </div>
+                        </div>
+                        <p>The proactive monitoring caught an issue before it became a disaster. Their team resolved it quickly without any downtime.</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <!-- Duplicate set for seamless loop -->
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">MS</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Michael Stevens</h5>
+                                <small class="text-muted">CFO, Tech Solutions Inc.</small>
+                            </div>
+                        </div>
+                        <p>The automated backup solution saved us during a server crash. We were back up and running in hours instead of days. Highly recommend their service!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">SJ</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Julie James</h5>
+                                <small class="text-muted">Main Street Iowa, LLC</small>
+                            </div>
+                        </div>
+                        <p>I was panicking when my QuickBooks file wouldn't open. Their emergency support had me back in business the same day. Worth every penny!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">RD</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Robert Davis</h5>
+                                <small class="text-muted">Accounting Manager</small>
+                            </div>
+                        </div>
+                        <p>The proactive monitoring caught an issue before it became a disaster. Their team resolved it quickly without any downtime.</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA SECTION ========== -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Don't Risk Your Financial Data</h2>
+                    <p class="lead mb-4">Protect your business from QuickBooks data disasters with our expert recovery and protection services.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="#demos" class="btn btn-light btn-lg">Get Protected Now</a>
+                        <a href="#demos" class="btn btn-outline-light btn-lg">See How It Works</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONTACT US SECTION (added from provided contact page) ========== -->
+    <section class="contact-section" id="contact-section">
+        <div class="container">
+            <!-- Header -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h1 class="section-title-about" style="font-size: 2.5rem; font-weight: 700; color: var(--dark); display: inline-block; position: relative;">
+                        Contact By Phone & Mail…
+                    </h1>
+                    <p class="fs-5 mt-4" style="color: #4a5568; max-width: 800px; margin-left: auto; margin-right: auto;">
+                        If you would like to speak to a member of our staff regarding payment processing, or any of our products or services, please call <strong class="highlight-green">818-206-2189</strong> or, feel free to contact us via email or by using the contact form on this page.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Main two columns -->
+            <div class="row g-5">
+                <!-- LEFT COLUMN: Contact Info & Why Customers Contact Us -->
+                <div class="col-lg-6">
+                    <div class="contact-info-card">
+                        <div class="contact-icon-lg">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h2 class="fw-bold mb-3" style="color: var(--dark);">E‑solution</h2>
+                        <p style="font-size: 1.05rem; color: #2d3e50; margin-bottom: 2rem;">
+                            Need help with your accounting, bookkeeping, or cloud hosting services? Our expert team is here to assist you with fast, reliable, and friendly support. Whether you’re facing login issues, data errors, billing concerns, or need a custom solution—just reach out and we’ll get back to you quickly.
+                        </p>
+
+                        <h4 class="fw-semibold mb-3" style="color: var(--primary-dark);">Why Customers Contact Us</h4>
+                        <ul class="why-list-custom">
+                            <li><i class="fas fa-sign-in-alt"></i> Login or access issues</li>
+                            <li><i class="fas fa-sync-alt"></i> Data sync problems</li>
+                            <li><i class="fas fa-calculator"></i> Bookkeeping errors</li>
+                            <li><i class="fas fa-file-invoice-dollar"></i> Invoice or payroll issues</li>
+                            <li><i class="fas fa-tachometer-alt"></i> Hosting performance concerns</li>
+                            <li><i class="fas fa-shield-alt"></i> Security alerts</li>
+                        </ul>
+
+                        <!-- Contact details (dark block) -->
+                        <div class="contact-block mt-4">
+                            <h4 style="color: white; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-headset me-2" style="color: var(--primary-light);"></i> Contact
+                            </h4>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 0;">Toll Free</p>
+                                    <h5 style="color: white; font-weight: 700;">818.206.2189</h5>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 0;">Mail</p>
+                                    <h5 style="color: white; font-weight: 600;">info@e-solution.us</h5>
+                                    <h5 style="color: white; font-weight: 600;">support@e-solution.us</h5>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 0;">Address</p>
+                                    <h5 style="color: white; font-weight: 600;">375S Main Street, lake port, california, 95453.</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Contact Form -->
+                <div class="col-lg-6">
+                    <div class="form-card">
+                        <div class="contact-icon-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h2 class="fw-bold mb-4" style="color: var(--dark);">Send us a message</h2>
+                        <form>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Name</label>
+                                    <input type="text" class="form-control" placeholder="Your name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control" placeholder="you@example.com" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Phone number</label>
+                                    <input type="tel" class="form-control" placeholder="(123) 456-7890">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Company name</label>
+                                    <input type="text" class="form-control" placeholder="Your company">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">How can I help you?</label>
+                                    <textarea class="form-control" rows="5" placeholder="Tell us about your issue or question..."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn-submit">Send Message</button>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-muted mt-4 mb-0 small">
+                            <i class="fas fa-lock me-1"></i> Your information is secure and will not be shared.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5><img src="https://i.ibb.co/d4DTVY62/Chat-GPT-Image-Nov-4-2025-04-01-58-AM-removebg-preview.png" alt="QB Data Shield" style="height: 50px;"></h5>
+                    <p class="text-white-50">Expert QuickBooks data protection, recovery, and emergency support services.</p>
+                    <div class="social-links">
+                        <a href="https://x.com/QuickBooks?lang=en"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/QuickBooksUK/"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.linkedin.com/showcase/quickbooks/"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://www.instagram.com/quickbooks/" target="legend"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Services</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features">Data Recovery</a></li>
+                        <li class="mb-2"><a href="#features">File Repair</a></li>
+                        <li class="mb-2"><a href="#features">Expert Support</a></li>
+                        <li class="mb-2"><a href="#features">Backup Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="C:\Users\Admin\Downloads\QBcss\about.html">About Us</a></li>
+                        <li class="mb-2"><a href="https://jobs.intuit.com/?cid=seo_google">Careers</a></li>
+                        <li class="mb-2"><a href="https://quickbooks.intuit.com/r/starting-a-business/">Press</a></li>
+                        <li class="mb-2"><a href="https://living-harlequin-drapnftat0-pvd1l24f8e.edgeone.app/">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Resources</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="https://quickbooks.intuit.com/r/">Blog</a></li>
+                        <li class="mb-2"><a href="#">Help Center</a></li>
+                        <li class="mb-2"><a href="https://quickbooks.intuit.com/au/learn-and-support/webinars/">Webinars</a></li>
+                        <li class="mb-2"><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="https://quickbooks.intuit.com/hk/privacy/">Privacy</a></li>
+                        <li class="mb-2"><a href="https://quickbooks.intuit.com/hk/privacy/">Terms</a></li>
+                        <li class="mb-2"><a href="https://quickbooks.intuit.com/learn-support/en-global/help-article/data-systems/clear-cache-cookies-fix-issues-using-quickbooks/L5tbGRlsg_ROW_en">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-4 text-center">
+                <p class="mb-0 text-white-50">&copy; 2023 QB Data Shield. All rights reserved. QuickBooks is a registered trademark of Intuit Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== PRICING MODAL ========== -->
+    <div class="modal fade" id="pricingModal" tabindex="-1" aria-labelledby="pricingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pricingModalLabel">QuickBooks Data Protection Pricing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="pricing-modal-body">
+                    <div id="pricing-root-modal"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- File Health Check JS (unchanged) -->
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // File Health Check variables and functions (exactly as original)
+        const questionSection = document.getElementById('question-section');
+        const uploadSection = document.getElementById('upload-section');
+        const resultSection = document.getElementById('result-section');
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const scanningState = document.getElementById('scanning-state');
+        const resultState = document.getElementById('result-state');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        const q1Wrapper = document.getElementById('q1-wrapper');
+        const q2Wrapper = document.getElementById('q2-wrapper');
+        const q3Wrapper = document.getElementById('q3-wrapper');
+
+        const next1Btn = document.getElementById('next1-btn');
+        const next2Btn = document.getElementById('next2-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const back1Btn = document.getElementById('back1-btn');
+        const back2Btn = document.getElementById('back2-btn');
+
+        const questionProgress = document.getElementById('question-progress');
+        const currentStepText = document.getElementById('current-step');
+        const percentText = document.getElementById('percent-text');
+
+        let currentQuestion = 1;
+        let answers = {};
+
+        function showQuestion(num) {
+            [q1Wrapper, q2Wrapper, q3Wrapper].forEach((q, i) => {
+                q.classList.remove('active');
+            });
+            document.getElementById(`q${num}-wrapper`).classList.add('active');
+
+            currentStepText.textContent = num;
+            const percent = ((num - 1) / 3) * 100;
+            questionProgress.style.width = `${percent}%`;
+            percentText.textContent = `${Math.round(percent)}%`;
+        }
+
+        function checkAnswer(questionName, nextBtn) {
+            const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+            nextBtn.disabled = !selected;
+            if (selected) {
+                answers[questionName] = selected.value;
+            }
+        }
+
+        document.querySelectorAll('input[name="q1"]').forEach(radio => {
+            radio.addEventListener('change', () => checkAnswer('q1', next1Btn));
+        });
+
+        document.querySelectorAll('input[name="q2"]').forEach(radio => {
+            radio.addEventListener('change', () => checkAnswer('q2', next2Btn));
+        });
+
+        document.querySelectorAll('input[name="q3"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                continueBtn.disabled = false;
+            });
+        });
+
+        next1Btn.addEventListener('click', () => {
+            currentQuestion = 2;
+            showQuestion(2);
+            if (answers.q2) {
+                document.querySelector(`input[name="q2"][value="${answers.q2}"]`).checked = true;
+                next2Btn.disabled = false;
+            }
+        });
+
+        next2Btn.addEventListener('click', () => {
+            currentQuestion = 3;
+            showQuestion(3);
+            if (answers.q3) {
+                document.querySelector(`input[name="q3"][value="${answers.q3}"]`).checked = true;
+                continueBtn.disabled = false;
+            }
+        });
+
+        back1Btn.addEventListener('click', () => {
+            currentQuestion = 1;
+            showQuestion(1);
+            if (answers.q1) {
+                document.querySelector(`input[name="q1"][value="${answers.q1}"]`).checked = true;
+                next1Btn.disabled = false;
+            }
+        });
+
+        back2Btn.addEventListener('click', () => {
+            currentQuestion = 2;
+            showQuestion(2);
+            if (answers.q2) {
+                document.querySelector(`input[name="q2"][value="${answers.q2}"]`).checked = true;
+                next2Btn.disabled = false;
+            }
+        });
+
+        continueBtn.addEventListener('click', () => {
+            answers.q3 = document.querySelector('input[name="q3"]:checked').value;
+            questionSection.style.display = 'none';
+            uploadSection.style.display = 'block';
+            dropZone.classList.add('enabled');
+        });
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+            dropZone.addEventListener(event, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        ['dragenter', 'dragover'].forEach(event => {
+            dropZone.addEventListener(event, () => dropZone.classList.add('dragover'));
+        });
+
+        ['dragleave', 'drop'].forEach(event => {
+            dropZone.addEventListener(event, () => dropZone.classList.remove('dragover'));
+        });
+
+        dropZone.addEventListener('drop', e => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) startScan(files[0]);
+        });
+
+        fileInput.addEventListener('change', e => {
+            if (e.target.files.length > 0) startScan(e.target.files[0]);
+        });
+
+        dropZone.addEventListener('click', () => {
+            if (dropZone.classList.contains('enabled')) fileInput.click();
+        });
+
+        function startScan(file) {
+            uploadSection.style.display = 'none';
+            resultSection.style.display = 'block';
+            scanningState.style.display = 'block';
+            resultState.style.display = 'none';
+
+            fileNameDisplay.textContent = `File: ${file.name} • Size: ${(file.size / 1024).toFixed(1)} KB • Type: QuickBooks Company File`;
+
+            const minDuration = 30000;
+            const maxDuration = 40000;
+            const scanDuration = Math.random() * (maxDuration - minDuration) + minDuration;
+            const startTime = Date.now();
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                progress = Math.min((elapsed / scanDuration) * 100, 100);
+
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}%`;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(showResult, 800);
+                }
+            }, 200);
+        }
+
+        function showResult() {
+            scanningState.style.display = 'none';
+            resultState.style.display = 'block';
+        }
+
+        function resetUpload() {
+            questionSection.style.display = 'block';
+            uploadSection.style.display = 'none';
+            resultSection.style.display = 'none';
+            fileInput.value = '';
+            progressFill.style.width = '0%';
+            progressText.textContent = '0%';
+
+            currentQuestion = 1;
+            answers = {};
+            showQuestion(1);
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            next1Btn.disabled = true;
+            next2Btn.disabled = true;
+            continueBtn.disabled = true;
+            dropZone.classList.remove('enabled');
+        }
+
+        showQuestion(1);
+        next1Btn.disabled = true;
+        next2Btn.disabled = true;
+        continueBtn.disabled = true;
+
+        // Consultation function for the new card button
+        function consult() {
+            alert('Thanks — we\'ll reach out to schedule your free consultation.');
+        }
+    </script>
+
+    <!-- React Pricing Calculator (unchanged) -->
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        function QbPricingCalculator() {
+            const DATA = {
+                products: [
+                    { id: "simple", label: "QuickBooks Simple Start", type: "online", monthly: 38, oneTimeSupport: 299 },
+                    { id: "essentials", label: "QuickBooks Essentials", type: "online", monthly: 40, oneTimeSupport: 299, support1yrNoPayroll: 399, support8yrNoPayroll: 899 },
+                    { id: "plus", label: "QuickBooks Plus", type: "online", monthly: 70, oneTimeSupport: 299, support1yr: { none: 499, core: 549, premium: 549, elite: 599 }, support3yr: { none: 1119, core: 1499, premium: 2149, elite: 2849 }, support8yrNoPayroll: 2099 },
+                    { id: "desktop_pro", label: "QuickBooks Desktop Pro", type: "desktop", yearly: 650, oneTimeSupport: 299, perUserSupport: 69 },
+                    { id: "desktop_premier", label: "QuickBooks Desktop Premier", type: "desktop", yearly: 650, oneTimeSupport: 399, perUserSupport: 69, support1yr: 599, support3yr: 1019, support8yr: 2119 },
+                    { id: "enterprise", label: "QuickBooks Desktop Enterprise (Gold)", type: "desktop", yearly: 1464, oneTimeSupport: 599, perUserSupport: 119, support1yr: 899, support3yr: 1999, support8yr: 3449 },
+                ],
+                payrolls: [
+                    { id: "none", label: "No Payroll", monthly: 0 },
+                    { id: "core", label: "Payroll Core", monthly: 50 },
+                    { id: "premium", label: "Payroll Premium", monthly: 88 },
+                    { id: "elite", label: "Payroll Elite", monthly: 134 },
+                ],
+                durations: [
+                    { id: "1yr", label: "1 year", multiplier: 1.0 },
+                    { id: "3yr", label: "3 years", multiplier: 0.92 },
+                    { id: "8yr", label: "5 + 3 years (8 yrs)", multiplier: 0.85 },
+                    { id: "one_time", label: "One-time", multiplier: 1.0 },
+                ],
+                userOptions: Array.from({ length: 10 }, (_, i) => i + 1),
+            };
+
+            const [productId, setProductId] = useState(DATA.products[0].id);
+            const [payrollId, setPayrollId] = useState(DATA.payrolls[0].id);
+            const [durationId, setDurationId] = useState(DATA.durations[0].id);
+            const [userCount, setUserCount] = useState(1);
+
+            const product = useMemo(() => DATA.products.find(p => p.id === productId), [productId]);
+            const payroll = useMemo(() => DATA.payrolls.find(p => p.id === payrollId), [payrollId]);
+            const duration = useMemo(() => DATA.durations.find(d => d.id === durationId), [durationId]);
+            const isOneTime = duration?.id === "one_time";
+            const isOnline = product?.type === "online";
+            const isDesktop = product?.type === "desktop";
+            const showUser = isDesktop && !isOneTime;
+
+            const breakdown = useMemo(() => {
+                let total = 0, support = 0, final = 0;
+
+                if (isOneTime) {
+                    support = product.oneTimeSupport;
+                    if (isDesktop && userCount > 1) {
+                        support += (userCount - 1) * product.perUserSupport;
+                    }
+                    total = support;
+                    final = support;
+                    return { total, support, final, months: 0 };
+                }
+
+                if (isOnline) {
+                    const months = duration.id === "1yr" ? 12 : duration.id === "3yr" ? 36 : 96;
+                    const combinedMonthly = product.monthly + payroll.monthly;
+                    total = Math.round(combinedMonthly * months * duration.multiplier);
+
+                    if (duration.id === "1yr" && product.id === "plus") {
+                        support = product.support1yr[payroll.id] || 599;
+                    }
+                    else if (duration.id === "3yr" && product.id === "plus") {
+                        support = product.support3yr[payroll.id] || 599;
+                    }
+                    else if (duration.id === "8yr" && payroll.id === "none") {
+                        if (product.id === "essentials") {
+                            support = product.support8yrNoPayroll;
+                        } else if (product.id === "plus") {
+                            support = product.support8yrNoPayroll;
+                        } else {
+                            support = 299 + 400;
+                        }
+                    }
+                    else if (duration.id === "1yr" && product.id === "essentials" && payroll.id === "none") {
+                        support = product.support1yrNoPayroll;
+                    }
+                    else {
+                        support = payroll.id === "none" ? 299 : 599;
+                        if (duration.id === "3yr") support += 300;
+                        if (duration.id === "8yr") support += 400;
+                    }
+                } 
+                else if (isDesktop) {
+                    const years = duration.id === "1yr" ? 1 : duration.id === "3yr" ? 3 : 8;
+                    const baseYearly = product.yearly + (payroll.monthly * 12);
+                    const userCost = (userCount - 1) * product.perUserSupport;
+                    total = Math.round((baseYearly + userCost) * years * duration.multiplier);
+
+                    let baseSupport = 0;
+                    if (product.id === "enterprise") {
+                        baseSupport = duration.id === "1yr" ? product.support1yr :
+                                    duration.id === "3yr" ? product.support3yr :
+                                    product.support8yr;
+                    } else if (product.id === "desktop_premier") {
+                        baseSupport = duration.id === "1yr" ? product.support1yr :
+                                    duration.id === "3yr" ? product.support3yr :
+                                    product.support8yr;
+                    } else {
+                        baseSupport = duration.id === "1yr" ? 499 :
+                                    duration.id === "3yr" ? (product.id === "desktop_pro" ? 799 : 899) :
+                                    (product.id === "desktop_pro" ? 1499 : 1499);
+                    }
+                    support = baseSupport + ((userCount - 1) * product.perUserSupport * years);
+                }
+
+                final = support;
+                return { total, support, final, months: duration.id === "1yr" ? 12 : duration.id === "3yr" ? 36 : 96 };
+            }, [product, payroll, duration, isOneTime, isDesktop, userCount]);
+
+            function formatMoney(n) {
+                return n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+            }
+
+            return (
+                <div className="min-h-screen bg-gray-50 py-12 px-4">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="bg-white p-6 rounded-2xl shadow-md">
+                            <div className="flex items-start justify-between gap-6">
+                                <div>
+                                    <h1 className="text-2xl font-semibold text-gray-800">QuickBooks — Data Protection Pricing</h1>
+                                    <p className="mt-1 text-sm text-gray-500">Select edition, payroll, duration, and users to see accurate support pricing.</p>
+                                </div>
+                            </div>
+                            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <label className="block">
+                                        <div className="text-sm font-medium text-gray-700">Product / Edition</div>
+                                        <select value={productId} onChange={(e) => { setProductId(e.target.value); setUserCount(1); }} className="mt-2 w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-200">
+                                            {DATA.products.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                                        </select>
+                                    </label>
+                                    <label className="block opacity-50" aria-hidden={isOneTime}>
+                                        <div className="text-sm font-medium text-gray-900">Payroll Version</div>
+                                        <select value={payrollId} onChange={(e) => setPayrollId(e.target.value)} disabled={isOneTime} className={`mt-2 w-full p-3 border rounded-lg focus:ring-2 ${isOneTime ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed" : "bg-white focus:ring-indigo-200"}`}>
+                                            {DATA.payrolls.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                                        </select>
+                                    </label>
+                                    <label className="block">
+                                        <div className="text-sm font-medium text-gray-700">Duration / Plan</div>
+                                        <select value={durationId} onChange={(e) => setDurationId(e.target.value)} className="mt-2 w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-200">
+                                            {DATA.durations.map(d => <option key={d.id} value={d.id}>{d.label}</option>)}
+                                        </select>
+                                    </label>
+                                    {showUser && (
+                                        <label className="block">
+                                            <div className="text-sm font-medium text-gray-700">Number of Users</div>
+                                            <select value={userCount} onChange={(e) => setUserCount(parseInt(e.target.value))} className="mt-2 w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-200">
+                                                {DATA.userOptions.map(n => <option key={n} value={n}>{n} user{n > 1 ? 's' : ''}</option>)}
+                                            </select>
+                                        </label>
+                                    )}
+                                    {isOneTime && <div className="mt-3 text-sm text-gray-500 italic">Payroll and multi-user not applicable for one-time support.</div>}
+                                </div>
+                                <div className="bg-gray-50 p-4 rounded-lg border">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="text-xs text-gray-500">Summary</div>
+                                            <div className="text-lg font-semibold text-gray-800 mt-1">{product.label}</div>
+                                        </div>
+                                        <div className="text-sm text-gray-500">{isOneTime ? "One-time" : `${duration.label}${showUser ? ` • ${userCount} user${userCount > 1 ? 's' : ''}` : ''}`}</div>
+                                    </div>
+                                    <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-700">
+                                        {isOnline && !isOneTime && (
+                                            <>
+                                                <div>Base monthly</div><div className="text-right font-medium">{formatMoney(product.monthly)}/mo</div>
+                                                <div>Payroll monthly</div><div className="text-right">{formatMoney(payroll.monthly)}/mo</div>
+                                                <div>Combined monthly</div><div className="text-right font-medium">{formatMoney(product.monthly + payroll.monthly)}/mo</div>
+                                            </>
+                                        )}
+                                        {isDesktop && !isOneTime && (
+                                            <>
+                                                <div>Base yearly</div><div className="text-right font-medium">{formatMoney(product.yearly)}/yr</div>
+                                                <div>Payroll yearly</div><div className="text-right">{formatMoney(payroll.monthly * 12)}/yr</div>
+                                                <div>Per extra user</div><div className="text-right">{formatMoney(product.perUserSupport)}/user/yr</div>
+                                            </>
+                                        )}
+                                        <div>Duration</div><div className="text-right">{isOneTime ? "—" : `${breakdown.months} months`}</div>
+                                        <div className="pt-3">Total for duration</div><div className="pt-3 text-right text-gray-800">{formatMoney(breakdown.total)}</div>
+                                        <div className="text-sm">Support price</div><div className="text-right font-semibold text-green-600">{formatMoney(breakdown.support)}</div>
+                                        <div className="text-sm">One-time support</div><div className="text-right text-gray-800">{isOneTime ? formatMoney(breakdown.support) : formatMoney(0)}</div>
+                                        <div className="pt-4 text-lg font-semibold">Final price</div><div className="pt-4 text-right text-3xl text-emerald-700 font-extrabold">{formatMoney(breakdown.final)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-6 text-xs text-gray-500">Prices exclude taxes. Multi-user pricing applies to support only. Contact sales for custom quotes.</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        window.showPricingCalculator = function() {
+            const modalContainer = document.getElementById('pricing-root-modal');
+            modalContainer.innerHTML = '';
+            const root = ReactDOM.createRoot(modalContainer);
+            root.render(<QbPricingCalculator />);
+            const modalElement = document.getElementById('pricingModal');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        };
+    </script>
+
+    <script>
+        // Attach click handler to "Activate the IDP" button
+        const originalShowResult = showResult;
+        window.showResult = function() {
+            originalShowResult.call(this);
+            const idpBtn = document.getElementById('activate-idp-btn');
+            if (idpBtn) {
+                idpBtn.onclick = function(e) {
+                    e.preventDefault();
+                    if (window.showPricingCalculator) {
+                        window.showPricingCalculator();
+                    }
+                };
+            }
+        }.bind(this);
+        window.showResult = showResult;
+    </script>
+</body>
+</html>

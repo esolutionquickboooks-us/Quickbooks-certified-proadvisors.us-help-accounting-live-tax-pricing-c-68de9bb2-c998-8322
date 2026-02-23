@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us – QB Data Shield</title>
+    <link rel="icon" type="image/svg+xml" href="https://downloadauthenticator.com/wp-content/uploads/2024/06/intuit_com.svg">
+    <!-- Bootstrap 5, Font Awesome, Inter font -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* === GLOBAL STYLES (identical to homepage, only what's needed) === */
+        :root {
+            --primary: #2CA01C;
+            --primary-dark: #008600;
+            --primary-light: #4CC73C;
+            --secondary: #4361ee;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+            padding-top: 90px;
+            background-color: #ffffff;
+        }
+        
+        /* === NAVBAR (exact same as homepage, with About link) === */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark) !important;
+            margin-right: 2rem;
+        }
+        
+        .navbar-brand img {
+            height: 55px;
+            transition: transform 0.2s;
+        }
+        
+        .navbar-brand img:hover {
+            transform: scale(1.03);
+        }
+        
+        .navbar .navbar-nav {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            gap: 0.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin: 0 8px;
+            color: var(--dark) !important;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 6px;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary) !important;
+            background-color: rgba(44, 160, 28, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0.75rem;
+            right: 0.75rem;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+            width: calc(100% - 1.5rem);
+            transform: scaleX(0);
+            transform-origin: center;
+        }
+        
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .navbar .btn {
+            margin-left: 8px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(44, 160, 28, 0.3);
+        }
+        
+        @media (max-width: 991px) {
+            .navbar .container {
+                flex-wrap: wrap;
+            }
+            .navbar .navbar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+                width: 100%;
+            }
+            body {
+                padding-top: 120px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar .navbar-nav {
+                gap: 0.2rem;
+            }
+            .nav-link {
+                margin: 0 4px;
+                padding: 0.4rem 0.5rem !important;
+                font-size: 0.9rem;
+            }
+            .navbar .btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* === ABOUT PAGE SPECIFIC STYLES (green/white/black theme) === */
+        .about-hero {
+            background: linear-gradient(145deg, #f9fbfd 0%, #ffffff 100%);
+            padding: 60px 0 40px;
+            border-bottom: 4px solid var(--primary);
+        }
+        
+        .section-title-about {
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title-about::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .about-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .about-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(44, 160, 28, 0.08);
+            border-color: var(--primary-light);
+        }
+        
+        .about-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(44, 160, 28, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .highlight-green {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .contact-block {
+            background: #000000;
+            color: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-block h4 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+            font-size: 1.3rem;
+        }
+        
+        .why-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .why-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .why-list li i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            width: 24px;
+        }
+        
+        .footer {
+            background: #000000;
+            color: white;
+            padding: 80px 0 30px;
+            margin-top: 60px;
+        }
+        
+        .footer h5, .footer h6 {
+            color: white;
+        }
+        
+        .footer a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .company-logo-footer {
+            height: 50px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============ NAVIGATION (identical to homepage) ============ -->
+    <nav class="navbar navbar-light fixed-top">
+        <div class="container d-flex flex-wrap align-items-center justify-content-between">
+            <a class="navbar-brand" href="index.html">
+                <img src="https://i.ibb.co/d4DTVY62/Chat-GPT-Image-Nov-4-2025-04-01-58-AM-removebg-preview.png" alt="QB Data Shield">
+            </a>
+            
+            <!-- Nav links: Accountants, For Business, Learn and Support, ABOUT, + buttons -->
+            <div class="navbar-nav flex-row align-items-center">
+                <a class="nav-link" href="index.html#features">Accountants</a>
+                <a class="nav-link" href="index.html#demos">For Business</a>
+                <a class="nav-link" href="index.html#testimonials">Learn and Support</a>
+                <a class="nav-link" href="about.html" style="color: var(--primary) !important; font-weight: 600;">About</a>
+                <div class="d-flex ms-lg-3">
+                    <a href="#" class="btn btn-outline-primary me-2">Login</a>
+                    <a href="index.html#demos" class="btn btn-primary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ MAIN ABOUT CONTENT – FRESH, NO HOMEPAGE COPY ============ -->
+    <main>
+        <!-- About intro section -->
+        <section class="about-hero">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <h1 class="section-title-about">About E‑solution</h1>
+                        <div class="about-card mt-4">
+                            <div class="about-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <p class="fs-5" style="color: #2d3e50; line-height: 1.7;">
+                                <span class="highlight-green">E‑solution</span> specializes in providing businesses of all sizes with outsourced bookkeeping and accounting, payroll processing, taxation, and consultancy services. Regardless of their size, we offer services to start-ups, SMEs, and other businesses. We offer a solution that can assist you in reducing the costs associated with hiring full-time bookkeepers and accountants internally or locally, while streamlining your company’s accounting, payroll, and tax calculation needs.
+                            </p>
+                            <p class="fs-5 mt-4" style="color: #2d3e50;">
+                                Unlike traditional accountants and bookkeepers who are only available during certain hours of the day, you will have access to a pool of resources who are working around the clock. Our staff of qualified bookkeepers, chartered accountants, and CPAs contributes their knowledge and experience to make your accounting department run smoothly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience & Reach -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="about-card h-100">
+                            <div class="about-icon">
+                                <i class="fas fa-globe-americas"></i>
+                            </div>
+                            <h3 class="fw-bold mb-3" style="color: var(--dark);">Decade of excellence</h3>
+                            <p style="font-size: 1.1rem;">
+                                We have worked with a range of firms over the course of our ten years in the sector, from e-commerce startups to elderly care providers. We have been offering our clients in <strong class="highlight-green">Texas, New York, California</strong>, and other US states end-to-end bookkeeping and accounting solutions.
+                            </p>
+                            <p class="mt-3" style="font-size: 1.1rem;">
+                                <i class="fas fa-map-pin text-success me-2"></i> Headquartered in USA, Australia, and the UK.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about-card h-100">
+                            <div class="about-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="fw-bold mb-3" style="color: var(--dark);">We Are Who?</h3>
+                            <p style="font-size: 1.1rem;">
+                                We are a group of <span class="highlight-green">Certified Public Accountants, Chartered Accountants, and specialists in the Accounting Field</span> that guarantee the impeccable upkeep of your business’s financial records all year long. In order to provide our clients the added benefit of having a professional on their side, we also offer expert advise and insights.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our approach / AI & Tools – UPDATED: four individual logos, no badge, "Certified Partners" remains -->
+        <section class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="about-card" style="background: linear-gradient(145deg, #fafcfc, white);">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="about-icon">
+                                        <i class="fas fa-microchip"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-3">Cutting‑edge. Certified. Precise.</h3>
+                                    <p style="font-size: 1.1rem;">
+                                        We handle bookkeeping and accounting tasks for companies using <span class="highlight-green">cutting‑edge AI methods</span>. This enables us to improve our clients’ books of accounts with speed, precision, and synergy. We are adept at using all of the widely used accounting programs, such as <strong>Sage, Xero, FreshBooks, QuickBooks</strong>, and so forth. In an effort to satisfy our clients, we always make sure to deliver work precisely as requested by them, strictly adhering to deadlines.
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <!-- FOUR INDIVIDUAL LOGOS, SIDE BY SIDE, ADJUSTED SIZES, NO BADGE -->
+                                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-4">
+                                        <!-- Sage logo -->
+                                        <img src="https://i.ibb.co/4ZtJp98j/44724b5d8019238b08311b8be2471d7e.png" 
+                                             alt="Sage" 
+                                             style="max-height: 55px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.03));">
+                                        <!-- Xero logo -->
+                                        <img src="https://www.sage.com/en-gb/shop/images/Sage_Logo_Brilliant_Green_RGB.png" 
+                                             alt="Xero" 
+                                             style="max-height: 55px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.03));">
+                                        <!-- Simplifi icon (Intuit) -->
+                                        <img src="https://images.ctfassets.net/hfxittkcm76w/5G2ia7Ig2zTFs1hEZ6oeBu/c93d10795b6c2d60f969ff00dcc44d09/simplifi-icon.svg" 
+                                             alt="Simplifi by Intuit" 
+                                             style="max-height: 48px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.03));">
+                                        <!-- FreshBooks logo -->
+                                        <img src="https://i.ibb.co/Myj9SVm4/freshbooks-2021-logo.png" 
+                                             alt="FreshBooks" 
+                                             style="max-height: 55px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.03));">
+                                    </div>
+                                    <!-- "Certified Partners" description remains, badge removed -->
+                                    <p class="mt-4 mb-0 fw-semibold" style="color: var(--primary); font-size: 1.2rem; letter-spacing: 0.5px;">
+                                        Certified Partners
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tagline & Custom solutions -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <span style="background: rgba(44,160,28,0.08); padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 600; color: var(--primary-dark);">
+                            <i class="fas fa-clock me-2"></i>Part-time accounting with full-time presence.
+                        </span>
+                        <h2 class="fw-bold mt-4" style="font-size: 2.2rem; color: #1e2c3a;">Our Accounting & Bookkeeping services are designed to be a tool that you can use to help grow your small business.</h2>
+                        <p class="fs-4 mt-3" style="color: var(--gray);">
+                            No two companies or bookkeeping systems are the same. <span style="color: var(--primary); font-weight: 700;">E‑solution Books</span> offers customized solutions to fit your small business needs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why work with us & Contact combined row -->
+        <section class="pb-5">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- Why work with us -->
+                    <div class="col-lg-6">
+                        <div class="about-card h-100">
+                            <div class="about-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h3 class="fw-bold mb-4">Why work with us?</h3>
+                            <ul class="why-list">
+                                <li><i class="fas fa-check-circle"></i> <strong>FREE Xero Online subscription</strong></li>
+                                <li><i class="fas fa-chart-line"></i> <strong>Increase your margins</strong></li>
+                                <li><i class="fas fa-hourglass-half"></i> <strong>Decrease time spent with the books</strong></li>
+                                <li><i class="fas fa-certificate"></i> <strong>We are certified to work in Xero Online.</strong></li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Certified QuickBooks ProAdvisors</strong> (on staff)</li>
+                            </ul>
+                            <p class="mt-3 text-success fw-semibold">
+                                <i class="fas fa-star"></i> Trusted by 50,000+ businesses
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Contact Information – dark theme, matches footer/navbar -->
+                    <div class="col-lg-6">
+                        <div class="contact-block h-100 d-flex flex-column justify-content-center">
+                            <h4><i class="fas fa-headset me-2" style="color: var(--primary-light);"></i> Get in touch</h4>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0" style="color: rgba(255,255,255,0.8);">Toll Free</p>
+                                    <h5 style="color: white; font-weight: 700;">818.206.2189</h5>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0" style="color: rgba(255,255,255,0.8);">Email</p>
+                                    <h5 style="color: white; font-weight: 600;">info@e-solution.us</h5>
+                                    <h5 style="color: white; font-weight: 600;">support@e-solution.us</h5>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0" style="color: rgba(255,255,255,0.8);">Address</p>
+                                    <h5 style="color: white; font-weight: 600;">375S Main Street, lake port, california, 95453</h5>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <span style="background: rgba(44,160,28,0.3); padding: 0.5rem 1.2rem; border-radius: 30px; color: white; font-weight: 500;">
+                                    <i class="fas fa-clock me-2"></i>24/7 support available
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- subtle separator (green line) -->
+        <div class="container">
+            <hr style="border: 2px solid var(--primary-light); opacity: 0.3; width: 80px; margin: 0 auto;">
+        </div>
+    </main>
+
+    <!-- ============ FOOTER (exact copy from homepage, unchanged) ============ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <img src="https://i.ibb.co/d4DTVY62/Chat-GPT-Image-Nov-4-2025-04-01-58-AM-removebg-preview.png" alt="QB Data Shield" style="height: 50px; margin-bottom: 1rem;">
+                    <p class="text-white-50">Expert QuickBooks data protection, recovery, and emergency support services.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Services</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html#features">Data Recovery</a></li>
+                        <li class="mb-2"><a href="index.html#features">File Repair</a></li>
+                        <li class="mb-2"><a href="index.html#features">Expert Support</a></li>
+                        <li class="mb-2"><a href="index.html#features">Backup Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html">About Us</a></li>
+                        <li class="mb-2"><a href="#">Careers</a></li>
+                        <li class="mb-2"><a href="#">Press</a></li>
+                        <li class="mb-2"><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Resources</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Blog</a></li>
+                        <li class="mb-2"><a href="#">Help Center</a></li>
+                        <li class="mb-2"><a href="#">Webinars</a></li>
+                        <li class="mb-2"><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Privacy</a></li>
+                        <li class="mb-2"><a href="#">Terms</a></li>
+                        <li class="mb-2"><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-4 text-center">
+                <p class="mb-0 text-white-50">&copy; 2023 QB Data Shield. All rights reserved. QuickBooks is a registered trademark of Intuit Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
